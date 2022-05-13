@@ -1,0 +1,65 @@
+WindowManager:
+    IntroPage:
+    FirstPage:
+    BorderlandsPage:
+
+#creates a Video object that can be used for all videos in the Widgets below - e.g. see IntroPage below
+<FullscreenVids@Video>:
+    background_color:0,0,0,0
+    state: "play"
+    volume: 0
+    #pos_hint: {'center_x':0.5, 'center_y':0.5}
+    keep_ratio:False
+    allow_stretch: True
+
+# not implemented yet but basically it's a Widget that can be dragged by clicking and dragging
+<Dragger>:
+    canvas:
+        Color:
+            rgba: 0, 0, 1, .5
+        Ellipse:
+            pos : self.pos
+            angle_start: 0
+            angle_end: 360
+            segments: 5
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: root.happy_num
+            origin: self.center
+    canvas.after:
+        PopMatrix
+
+<IntroPage>:
+    name: "intro"
+    BoxLayout:
+        FullscreenVids:
+            source: 'video/cybersteam_intro.mp4'
+            state: 'play'
+            #when the intro video stops playing - goto FirstPage ("first")
+            on_eos: app.root.current = 'first'
+<FirstPage>:
+    name: "first"
+    on_enter:
+        self.snd.playaudio()
+    BoxLayout:
+        FullscreenVids:
+            source:'video/mtn_scene2.mp4'
+            #options: {'eos':'loop'} #if you want to loop a video
+            #when the FirstPage video stops playing goto next screen in the ScreenManager - 'borderlands'
+            on_eos: app.root.current = 'borderlands'
+    Image:
+        source: 'images/albatross.png'
+        keep_ratio: True
+        #size: 200, 200
+        size_hint: 0.5, 0.5
+        #pos_hint: {'center_x': 1,'center_y': 1}
+        pos: root.width / 4, root.height / 3.5
+
+<BorderlandsPage>:
+    name: 'borderlands'
+    Image:
+        #
+        source: 'images/spitz.jpg'
+        allow_stretch: True
+        keep_ratio:False
